@@ -1,8 +1,5 @@
 import Car from "../models/Cars.js";
-<<<<<<< HEAD
-=======
 import User from "../models/user.js";
->>>>>>> f17b687 (updated the code)
 import cloudinary from "../lib/cloudinary.js";
 import bcrypt from 'bcryptjs'
 import axios from "axios"
