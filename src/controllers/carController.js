@@ -107,7 +107,7 @@ export const availableCars = async (req, res) => {
     const { location } = req.body;
     console.log(location,"availableCars hitted")
     try {
-        const cars = await Car.find({ city: location, isAvailable: true });
+       const cars = await Car.find({ city: location.toUpperCase(), isAvailable: true });
 
         if (cars.length === 0) {
             return res.status(404).json({ message: "No cars found in this location" });
