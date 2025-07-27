@@ -105,7 +105,7 @@ export const deleteCar = async (req, res) => {
 
 export const availableCars = async (req, res) => {
     const { location } = req.body;
-    console.log('location',"availableCars hitted")
+    console.log(location,"availableCars hitted")
     try {
         const cars = await Car.find({ city: location, isAvailable: true });
 
