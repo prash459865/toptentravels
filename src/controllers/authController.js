@@ -8,7 +8,7 @@ import bcrypt from 'bcryptjs';
 export const userSignup = async (req, res) => {
   try {
     const {phoneNumber, password, pushToken } = req.body;
-
+    console.log(phoneNumber, password, pushToken,"login hitted ")
     if (!phoneNumber || !password || phoneNumber.length !== 10) {
       return res.status(400).json({
         success: false,
