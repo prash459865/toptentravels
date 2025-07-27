@@ -104,13 +104,15 @@ export const deleteCar = async (req, res) => {
 };
 
 export const availableCars = async (req, res) => {
-    const { location } = req.body;
-    console.log(location,"availableCars hitted")
+    const { location1,location2 } = req.body;
+
+    const location = location1 || location2;
+    console.log(location1,location2,'from available cars ')
     try {
-       const cars = await Car.find({ city: location.toUpperCase(), isAvailable: true });
+        const cars = await Car.find({ city: location.toUpperCase(), isAvailable: true });
 
         if (cars.length === 0) {
-            return res.status(404).json({ message: "No cars found in this location" });
+            return res.status(404).json({ message: "No cars found at your location" });
         }
 
         res.status(200).json({ success: true, cars });
