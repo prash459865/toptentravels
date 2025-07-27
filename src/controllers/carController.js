@@ -6,7 +6,7 @@ import axios from "axios"
 
 export const fetchCar = async (req, res) => {
     const { phoneNumber } = req.body;
-
+   
     try {
         if (!phoneNumber || phoneNumber.trim() === "") {
             return res.status(400).json({ message: "Phone number is required" });
@@ -105,7 +105,7 @@ export const deleteCar = async (req, res) => {
 
 export const availableCars = async (req, res) => {
     const { location } = req.body;
-
+    console.log('location',"availableCars hitted")
     try {
         const cars = await Car.find({ city: location, isAvailable: true });
 
