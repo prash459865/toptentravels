@@ -56,28 +56,53 @@ export const userLogin = async (req, res) => {
     if (!phoneNumber || phoneNumber.length !== 10 || !password) {
       return res.status(400).json({
         success: false,
-        message: 'Enter a valid 10-digit phone number and password'
+        message: 'Enter a valid 10-digit phone number and password',
       });
     }
 
-    const user = await User.findOne({ phoneNumber }).select('-password');
+    // Get user with password field
+    const user = await User.findOne({ phoneNumber });
 
     if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found.', });
+      return res.status(404).json({
+        success: false,
+        message: 'User not found.',
+      });
     }
 
+    // Compare hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: 'Incorrect password.',
+      });
+    }
+
+    // Update push token if changed
     if (user.notificationToken !== pushToken) {
-      user.expoPushToken = pushToken;
+      user.notificationToken = pushToken;
       await user.save();
     }
+
     const token = generateToken(user._id);
-    return res.status(200).json({ success: true, message: 'Login successful', user, token, });
+
+    // Remove password before sending user data
+    const userWithoutPassword = user.toObject();
+    delete userWithoutPassword.password;
+
+    return res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      user: userWithoutPassword,
+      token,
+    });
 
   } catch (error) {
-    console.error('Error in loginSignup:', error);
+    console.error('Error in userLogin:', error);
     return res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: 'Server error',
     });
   }
 };
